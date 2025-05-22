@@ -6,8 +6,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=01:00:00
-#SBATCH --output=/home/scur0549/logs/out-%x.%A.out
-#SBATCH --error=/home/scur0549/logs/err-%x.%A.err
+#SBATCH --output=/home/scur0993/logs/out-%x.%A.out
+#SBATCH --error=/home/scur0993/logs/err-%x.%A.err
 
 module purge
 # The default modules for deep learning
@@ -15,5 +15,8 @@ module load 2023
 module load Anaconda3/2023.07-2
 
 # Go to the directory that contains the conda env file and install it
-cd $HOME
+cd $HOME/seater
 conda env create -f environment.yaml
+source activate seater
+pip install -r requirements.txt
+
