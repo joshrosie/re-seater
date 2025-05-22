@@ -7,8 +7,8 @@
 - Name 3 – email@example.com  
 
 ## 👥 Supervising TAs
-- TA Name 1 (Main Supervisor)
-- TA Name 2 (Co-supervisor)
+- David Vos (Main Supervisor)
+- Owen de Jong (Co-supervisor)
 
 
 ---
