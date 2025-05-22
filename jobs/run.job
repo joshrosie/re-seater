@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --job-name=RunTraining
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=06:00:00
+#SBATCH --output=/home/scur0549/logs/out-%x.%A.out
+#SBATCH --error=/home/scur0549/logs/err-%x.%A.err
+
+module purge
+# The default modules for deep learning
+module load 2023
+module load Anaconda3/2023.07-2
+
+# Activate your environment
+source activate eeg-decoder
+
+# Go to the directory that contains the project, the runnable
+cd $HOME/eeg-decoder
+srun python -O NICE-EEG-main/nice_stand.py --dataset_path /scratch-shared/$USER/datasets/Things-EEG2/ --use_attn

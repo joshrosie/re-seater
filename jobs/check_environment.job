@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --job-name=CheckEnvironment
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=00:10:00
+#SBATCH --output=/home/scur0549/logs/out-%x.%A.out
+#SBATCH --error=/home/scur0549/logs/err-%x.%A.err
+
+module purge
+module load 2023
+module load Anaconda3/2023.07-2
+
+# Activate your environment
+source activate seater
+# Check whether the GPU is available
+python -uc "import torch; print('\n\nGPU available?', torch.cuda.is_available())"
