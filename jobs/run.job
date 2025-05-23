@@ -10,13 +10,15 @@
 #SBATCH --error=/home/scur0993/logs/err-%x.%A.err
 
 module purge
-# The default modules for deep learning
-module load 2023
-module load Anaconda3/2023.07-2
+module load 2024
+module load Miniconda3/24.7.1-0
+module load jax/0.3.14-foss-2022a-CUDA-11.7.0
+module load CUDA/12.6.0
 
 # Activate your environment
-source activate eeg-decoder
+source activate seater
 
 # Go to the directory that contains the project, the runnable
-cd $HOME/eeg-decoder
-srun python -O NICE-EEG-main/nice_stand.py --dataset_path /scratch-shared/$USER/datasets/Things-EEG2/ --use_attn
+cd $HOME/seater
+# Books
+srun python main.py --name SEATER_Books --dataset_name Books --gpu_id 0 --model SEATER --vocab 16
