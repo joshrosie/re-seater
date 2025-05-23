@@ -26,11 +26,29 @@ Setup project by running the following commands:
 
 
 
-```bash
-# Example -- overwrite if needed
-conda create -n XXXXX python=XXXX
-conda activate XXXXX
+```#!/bin/bash
+
+#SBATCH --partition=gpu_a100
+#SBATCH --gpus=1
+#SBATCH --job-name=InstallEnvironment
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=03:00:00
+#SBATCH --output=/home/_snellius-name_/logs/out-%x.%A.out
+#SBATCH --error=/home/_snellius-name_/logs/err-%x.%A.err
+
+module purge
+module load 2024
+module load Miniconda3/24.7.1-0
+module load jax/0.3.14-foss-2022a-CUDA-11.7.0
+module load CUDA/12.6.0
+
+# Go to the directory that contains the conda env file and install it
+cd $HOME/seater
+conda create -n seater python=3.9.16 -y
+source activate seater
 pip install -r requirements.txt
+conda install -c conda-forge cudatoolkit=11.1
 ```
 
 ---
