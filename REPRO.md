@@ -72,6 +72,10 @@ cd ../..
 
 Set your parameters in the config file before training. Example:
 
+Reduced num_workers 32->16
+Reduced batch_size/test_batch_size 2048->256 
+
+I don't know what the maximum parameters are to make it work with snellius, but the default values were too big.
 
 ---
 
