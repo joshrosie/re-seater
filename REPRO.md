@@ -55,7 +55,7 @@ conda install -c conda-forge cudatoolkit=11.1
 
 ## 📂 Download & Prepare Datasets
 
-Place your datasets in the `XXXX/` directory.
+Download the books data linked in the original readme, then make sure you update the ''datafile_par_path'' in config\const.py to point to that directory.
 
 ### Example Dataset
 ```bash
