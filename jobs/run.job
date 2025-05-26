@@ -21,4 +21,4 @@ source activate seater
 # Go to the directory that contains the project, the runnable
 cd $HOME/seater/SEATER_Generative_Retrieval
 # Books
-srun python main.py --name SEATER_Books --dataset_name Books --gpu_id 0 --model SEATER --vocab 16
+srun python main.py --name SEATER_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model SASREC --vocab 16 --batch_size 1024 --test_batch_size 256 --epochs 1
