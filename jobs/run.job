@@ -19,6 +19,6 @@ module load CUDA/12.6.0
 source activate seater
 
 # Go to the directory that contains the project, the runnable
-cd $HOME/seater
+cd $HOME/seater/SEATER_Generative_Retrieval
 # Books
 srun python main.py --name SEATER_Books --dataset_name Books --gpu_id 0 --model SEATER --vocab 16
