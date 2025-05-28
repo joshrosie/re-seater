@@ -52,7 +52,6 @@ class SequenceDataset(Dataset):
         
         if self.mode == 'training':
             self.item_table_with_popularity = self.record['next_item'].tolist()
-
         print('build {} dataset successfully'.format(self.mode))
 
     def __len__(self):

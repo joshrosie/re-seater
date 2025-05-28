@@ -12,6 +12,7 @@ import logging
 import numpy as np
 import yaml
 import os
+import wandb
 
 import utils.data as data
 from utils.build_tree import build_hieraichical_clustering_tree
@@ -48,7 +49,10 @@ class Trainer(object):
         if not self.flags_obj.use_gpu:
             self.device = torch.device('cpu')
         else:
-            self.device = torch.device('cuda:{}'.format(self.flags_obj.gpu_id))
+            if torch.cuda.is_available():
+                self.device = torch.device('cuda:{}'.format(self.flags_obj.gpu_id))
+            else:
+                self.device = torch.device('mps')
         
     def load_model_config(self):
         path = 'config/{}/{}.yaml'.format(self.dm.dataset_name, self.model_name)
@@ -87,7 +91,7 @@ class Trainer(object):
         self.train_dataloader = data.get_dataloader(
             data_set = getattr(data, f'{self.model_name.upper()}_Dataset')(self.dm, mode='training'),
             bs = self.dm.batch_size,
-            prefetch_factor = self.dm.batch_size // self.dm.num_workers + 1 if self.dm.num_workers!=0 else 2, 
+            # prefetch_factor = self.dm.batch_size // self.dm.num_workers + 1 if self.dm.num_workers!=0 else 2, 
             num_workers = self.dm.num_workers,
             shuffle=True
         )
@@ -95,26 +99,30 @@ class Trainer(object):
         self.valid_dataloader =  data.get_dataloader(
             data_set = getattr(data, f'{self.model_name.upper()}_Dataset')(self.dm, mode='validation'),
             bs = self.dm.test_batch_size,
-            prefetch_factor = self.dm.batch_size // self.dm.num_workers + 1 if self.dm.num_workers!=0 else 2, 
+            # prefetch_factor = self.dm.batch_size // self.dm.num_workers + 1 if self.dm.num_workers!=0 else 2, 
             num_workers = self.dm.num_workers
         )
         # test dataloader
         self.test_dataloader =  data.get_dataloader(
             data_set = getattr(data, f'{self.model_name.upper()}_Dataset')(self.dm, mode='test'),
             bs = self.dm.test_batch_size,
-            prefetch_factor = self.dm.batch_size // self.dm.num_workers + 1 if self.dm.num_workers!=0 else 2, 
+            # prefetch_factor = self.dm.batch_size // self.dm.num_workers + 1 if self.dm.num_workers!=0 else 2, 
             num_workers = self.dm.num_workers
         )
 
     
     def save_ckpt(self):
-
+        """Save checkpoint and optionally upload to WandB"""
         ckpt_path = os.path.join(self.cm.workspace, 'ckpt')
         if not os.path.exists(ckpt_path):
             os.mkdir(ckpt_path)
 
         model_path = os.path.join(ckpt_path, 'best.pth')
         torch.save(self.model.state_dict(), model_path)
+        
+        # Upload model to WandB if enabled
+        if self.flags_obj.use_wandb:
+            wandb.save(model_path)
 
     def load_ckpt(self, assigned_path=None):
 
@@ -173,14 +181,25 @@ class Trainer(object):
             self.optimizer.step()
             
             epoch_loss += loss.item()
-            
+            print(self.train_dataloader.__len__())
             if step % (self.train_dataloader.__len__() // 50) == 0 and step != 0:
+                current_loss = epoch_loss / (step+1+epoch*self.train_dataloader.__len__())
                 tqdm_.set_description(
-                        "epoch {:d} , step {:d} , loss: {:.4f}".format(epoch, step+1, epoch_loss / (step+1+epoch*self.train_dataloader.__len__())))
+                        "epoch {:d} , step {:d} , loss: {:.4f}".format(epoch, step+1, current_loss))
+                
+                # Log to TensorBoard
                 if self.writer and self.flags_obj.train_tb:
-
-                    self.writer.add_scalar("training_loss",
-                                    epoch_loss/(step+1+epoch*self.train_dataloader.__len__()), step+1+epoch*self.train_dataloader.__len__())
+                    self.writer.add_scalar("training_loss", current_loss, 
+                                         step+1+epoch*self.train_dataloader.__len__())
+                
+                # Log to WandB
+                if self.flags_obj.use_wandb:
+                    wandb.log({
+                        "train/loss": current_loss,
+                        "train/epoch": epoch,
+                        "train/step": step+1+epoch*self.train_dataloader.__len__()
+                    })
+                    
         logging.info('epoch {}:  loss = {}'.format(epoch, epoch_loss/(step+1+epoch*self.train_dataloader.__len__())))
 
         train_loss[0] = epoch_loss
@@ -238,9 +257,11 @@ class Trainer(object):
 
         # cpu() results in gpu memory not auto-collected
         # this command frees memory in Nvidia-smi
-        if self.device != torch.device('cpu'):
+        if self.device.type == 'cuda':
             with torch.cuda.device(self.device):
-                torch.cuda.empty_cache() 
+                torch.cuda.empty_cache()
+        elif self.device.type == 'mps':
+            torch.mps.empty_cache()
 
         return group_pred_items, group_next_items
 
@@ -270,15 +291,15 @@ class Trainer(object):
 
 
     def record_metrics(self, epoch, metric):
-        """
-        record metrics after each epoch
-        """    
-
-        logging.info('VALIDATION epoch: {}, results: {}'.format(epoch, metric))
+        """Record metrics to tensorboard and wandb"""
         if self.writer:
-            if epoch != 'test':
-                for k,v in metric.items():
-                        self.writer.add_scalar("training_metric/"+str(k), v, epoch)
+            for k, v in metric.items():
+                self.writer.add_scalar(f"metrics/{k}", v, epoch)
+        
+        if self.flags_obj.use_wandb:
+            wandb_metrics = {f"metrics/{k}": v for k, v in metric.items()}
+            wandb_metrics["epoch"] = epoch
+            wandb.log(wandb_metrics)
 
 
  

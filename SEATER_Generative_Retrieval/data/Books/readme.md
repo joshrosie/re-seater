@@ -1,5 +1,5 @@
 # News Dataset
-The Amazon review dataset is one of the most widely used recommendation benchmarks. We adopt the `Books' subset. We utilized the processed data from the public repository (https://github.com/THUDM/ComiRec). 
+The Amazon review dataset~\cite{amazon_dataset} is one of the most widely used recommendation benchmarks. We adopt the `Books' subset. We utilized the processed data from the public repository (https://github.com/THUDM/ComiRec). 
 
 ## Main Data Files
 
