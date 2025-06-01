@@ -1,5 +1,5 @@
 import numpy as np
-from intra_list_diversity import ILD
+from utils.intra_list_diversity import ILD
 
 def eva(pre, ground_truth, comi_ndcg=False):
     
