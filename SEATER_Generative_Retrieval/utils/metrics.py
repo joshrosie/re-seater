@@ -2,6 +2,8 @@ import numpy as np
 from utils.intra_list_diversity import ILD
 
 def eva(pre, ground_truth, comi_ndcg=False):
+
+    calcIDL = False
     
     hit20, recall20, NDCG20, hit50, recall50, NDCG50, tot_ILD = (0, 0, 0, 0, 0, 0, 0)
     ILDiv = ILD()
@@ -50,7 +52,10 @@ def eva(pre, ground_truth, comi_ndcg=False):
         
 
         # Intra List Diversity
-        tot_ILD += ILDiv.calculate_ild(pre[i])
+        if calcIDL:
+            tot_ILD += ILDiv.calculate_ild(pre[i])
+        else:
+            tot_ILD += 1
 
     hit20, recall20, NDCG20, hit50, recall50, NDCG50, tot_ILD = \
         hit20 / len(ground_truth), recall20 / len(ground_truth), NDCG20 / len(ground_truth),\
