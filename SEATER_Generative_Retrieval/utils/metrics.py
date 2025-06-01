@@ -1,8 +1,10 @@
 import numpy as np
+from intra_list_diversity import ILD
 
 def eva(pre, ground_truth, comi_ndcg=False):
     
-    hit20, recall20, NDCG20, hit50, recall50, NDCG50 = (0, 0, 0, 0, 0, 0)
+    hit20, recall20, NDCG20, hit50, recall50, NDCG50, tot_ILD = (0, 0, 0, 0, 0, 0, 0)
+    ILDiv = ILD()
     epsilon = 0.1 ** 10
     for i in range(len(ground_truth)):
         one_DCG20, one_recall20, IDCG20, one_hit20, one_DCG50, one_recall50, IDCG50, one_hit50 = (
@@ -45,14 +47,21 @@ def eva(pre, ground_truth, comi_ndcg=False):
         recall20 += len(top_20_item & positive_item) / max(len(positive_item), epsilon)
         recall50 += len(top_50_item & positive_item) / max(len(positive_item), epsilon)
 
-    hit20, recall20, NDCG20, hit50, recall50, NDCG50 = \
+        
+
+        # Intra List Diversity
+        tot_ILD += ILDiv.calculate_ild(pre[i])
+
+    hit20, recall20, NDCG20, hit50, recall50, NDCG50, tot_ILD = \
         hit20 / len(ground_truth), recall20 / len(ground_truth), NDCG20 / len(ground_truth),\
-        hit50 / len(ground_truth), recall50 / len(ground_truth), NDCG50 / len(ground_truth)
+        hit50 / len(ground_truth), recall50 / len(ground_truth), NDCG50 / len(ground_truth),\
+        tot_ILD / len(ground_truth)
 
     result = {
         'ndcg@20': round(NDCG20, 4), 'ndcg@50': round(NDCG50, 4),
         'hit@20': round(hit20, 4), 'hit@50': round(hit50, 4),
-        'recall@20': round(recall20, 4), 'recall@50': round(recall50, 4)
+        'recall@20': round(recall20, 4), 'recall@50': round(recall50, 4),
+        'ILD': round(tot_ILD, 4)
     }
 
     return result
