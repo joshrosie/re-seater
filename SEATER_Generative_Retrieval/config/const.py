@@ -3,7 +3,7 @@ class Books_Config(object):
     def __init__(self) -> None:
         
         # data file path
-        self.datafile_par_path = '../../Books/Books'
+        self.datafile_par_path = '../../Books'
         # self.datafile_par_path = './data/Books'
         self.training_file = 'dataset/training.tsv'
         self.validation_file = 'dataset/validation.tsv'
