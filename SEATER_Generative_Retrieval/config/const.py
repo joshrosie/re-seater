@@ -3,7 +3,7 @@ class Books_Config(object):
     def __init__(self) -> None:
         
         # data file path
-        self.datafile_par_path = './data/Books'
+        self.datafile_par_path = '../../Books'
         # self.datafile_par_path = './data/Books'
         self.training_file = 'dataset/training.tsv'
         self.validation_file = 'dataset/validation.tsv'
@@ -11,7 +11,7 @@ class Books_Config(object):
         # self.itemID_2_attr = 'vocab/item_2_attr_mapping.npy'
 
         # for tree-based index
-        self.tree_data_par_path = './data/Books/tree_data_SASREC'
+        self.tree_data_par_path = '../../Books/tree_data_SASREC'
         # self.tree_data_par_path = './data/Books/tree_data_SASREC'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
@@ -30,14 +30,14 @@ class Yelp_Config(object):
     def __init__(self) -> None:
         
         # data file path
-        self.datafile_par_path = './data/Yelp'
+        self.datafile_par_path = '../../Yelp/Yelp'
         # self.datafile_par_path = './data/Yelp'
         self.training_file = 'dataset/training.tsv'
         self.validation_file = 'dataset/validation.tsv'
         self.test_file = 'dataset/test.tsv'
 
         # for tree-based index
-        self.tree_data_par_path = './data/Yelp/tree_data_SASREC'
+        self.tree_data_par_path = '../../Yelp/Yelp/tree_data_SASREC'
         # self.tree_data_par_path = './data/Yelp/tree_data_SASREC'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
@@ -55,14 +55,14 @@ class MIND_Config(object):
     def __init__(self) -> None:
         
         # data file path
-        self.datafile_par_path = './data/MIND'
+        self.datafile_par_path = '../../MIND/MIND'
         # self.datafile_par_path = './data/MIND'
         self.training_file = 'dataset/training.tsv'
         self.validation_file = 'dataset/validation.tsv'
         self.test_file = 'dataset/test.tsv'
 
         # for tree-based index
-        self.tree_data_par_path = './data/MIND/tree_data_SASREC'
+        self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
         # self.tree_data_par_path = './data/MIND/tree_data_SASREC'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'      
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
