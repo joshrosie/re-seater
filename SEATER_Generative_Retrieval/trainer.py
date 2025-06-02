@@ -181,7 +181,7 @@ class Trainer(object):
             self.optimizer.step()
             
             epoch_loss += loss.item()
-            print(self.train_dataloader.__len__())
+            # print(self.train_dataloader.__len__())
             if step % (self.train_dataloader.__len__() // 50) == 0 and step != 0:
                 current_loss = epoch_loss / (step+1+epoch*self.train_dataloader.__len__())
                 tqdm_.set_description(

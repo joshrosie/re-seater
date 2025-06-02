@@ -11,7 +11,7 @@ class Books_Config(object):
         # self.itemID_2_attr = 'vocab/item_2_attr_mapping.npy'
 
         # for tree-based index
-        self.tree_data_par_path = '../../Books/Books/tree_data_SASREC'
+        self.tree_data_par_path = '../../Books/tree_data_SASREC'
         # self.tree_data_par_path = './data/Books/tree_data_SASREC'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
