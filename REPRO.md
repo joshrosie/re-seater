@@ -33,6 +33,11 @@ Download the books data linked in the original readme, then make sure you update
 
 For processing new datasets we have prepared some notebooks in ```\data\```. Note that these area a starting point, and are not fully functional out of the box.
 
+The raw data for the books dataset can be downloaded from https://nijianmo.github.io/amazon/. The paper uses the 5-core version. The book information (for fairness metrics) can be gotten from the metadata file. See ```data\Books\preprocess_categories.ipynb``` for how to use these files.
+
+Note: The link to the books data is down as I am writing this, but the file can also be downloaded from this page: https://amazon-reviews-2023.github.io/
+
+
 
 
 ---
