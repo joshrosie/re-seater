@@ -22,4 +22,6 @@ source activate seater
 # pip install -r requirements.txt
 # pip install setuptools==59.5.0
 # conda install -c conda-forge cudatoolkit=11.1
-pip install --upgrade torch
+# pip install --upgrade torch
+# pip install polars
+pip install wandb
