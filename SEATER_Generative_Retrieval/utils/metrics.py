@@ -6,7 +6,7 @@ def eva(pre, ground_truth, comi_ndcg=False):
 
     calcGini = False
     
-    hit20, recall20, NDCG20, hit50, recall50, NDCG50, gini20, gini50 = (0, 0, 0, 0, 0, 0, 0, 0, 0)
+    hit20, recall20, NDCG20, hit50, recall50, NDCG50, gini20, gini50 = (0, 0, 0, 0, 0, 0, 0, 0)
     Gini = GiniCoefficient()
     epsilon = 0.1 ** 10
     for i in range(len(ground_truth)):

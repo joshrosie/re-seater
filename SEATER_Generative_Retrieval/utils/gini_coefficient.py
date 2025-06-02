@@ -1,4 +1,5 @@
 import numpy as np
+from utils import data_utils
 
 class GiniCoefficient:
     """
@@ -31,8 +32,10 @@ class GiniCoefficient:
         Gini coefficient over the frequency distribution of that key.
         """
         # count frequencies
+        id2cat = data_utils.load_tsv_file("../../Books/dataset/", "id2cat", sep='\t', engine="pyarrow")
+
         freqs = {}
         for art in articles:
-            val = art.get(key, None) or "UNKNOWN"
+            val = id2cat.get(art, None) or "UNKNOWN"
             freqs[val] = freqs.get(val, 0) + 1
         return self.gini_coefficient(list(freqs.values()))
