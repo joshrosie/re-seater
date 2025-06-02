@@ -20,8 +20,10 @@ source activate seater
 
 # Go to the directory that contains the project, the runnable
 cd $HOME/seater/SEATER_Generative_Retrieval
-# cd $HOME/seater/SEATER_Generative_Retrieval/data/Yelp
+
 # Books
-srun python main.py --name SEATER_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model SEATER --vocab 16 --batch_size 1024 --test_batch_size 256 --epochs 1
+srun python main.py --name SEATER_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model SEATER --vocab 16 --batch_size 1024 --test_batch_size 256 --epochs 60
 # srun python main.py --name SEATER_Books --dataset_name Yelp --num_workers 16 --gpu_id 0 --model SASREC --vocab 8 --batch_size 256 --test_batch_size 256 --epochs 50
+
+# cd $HOME/seater/SEATER_Generative_Retrieval/data/Yelp
 # srun python preprocessing.py
