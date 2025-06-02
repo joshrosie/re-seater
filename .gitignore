@@ -177,6 +177,7 @@ cython_debug/
 SEATER_Generative_Retrieval/data/*/dataset/
 SEATER_Generative_Retrieval/data/*/raw_data/
 SEATER_Generative_Retrieval/data/*/SEATER_checkpoint/
+SEATER_Generative_Retrieval/data/*/SASRec_checkpoint/
 SEATER_Generative_Retrieval/data/*/tree_data_SASREC/
 SEATER_Generative_Retrieval/data/*/vocab/
 
