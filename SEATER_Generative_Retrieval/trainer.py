@@ -171,6 +171,7 @@ class Trainer(object):
             self.optimizer.zero_grad()
 
             sample = tuple(input_data.to(self.device) for input_data in sample)
+            print(sample)
             loss = self._get_loss(sample)
 
             if torch.isnan(loss):
