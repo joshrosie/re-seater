@@ -16,4 +16,6 @@ module load Anaconda3/2023.07-2
 # Activate your environment
 source activate seater
 # Check whether the GPU is available
-python -uc "import wandb; wandb.login(key='21d7e4731f000097b01178f23724f90f56da5840')"
+python -uc "import torch; print(torch.cuda.is_available())"
+# Configure wandb
+python -uc "import wandb; wandb.login(key='')"

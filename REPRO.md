@@ -8,13 +8,11 @@ This document provides the full set of instructions to reproduce our project res
 
 ```bash
 .
-├── data/                   # Contains raw and processed datasets
-├── src/                    # All source code (models, training, evaluation)
+├── seater/                    # All source code (models, training, evaluation)
 ├── requirements.txt        # Python dependencies
 ├── README.md               # README file
 ├── REPRO.md                # This file
-├── XXXXX
-├── XXXXX
+├── jobs/                   # Slurm files for snellius
 ```
 
 ---
@@ -22,49 +20,20 @@ This document provides the full set of instructions to reproduce our project res
 ## ⚙️ Environment Setup
 
 
-Setup project by running the following commands:
+Setup project by running ```jobs\install_environment.job```. For a local installation you can run the commands in that file one by one.
+To check your installation and set up wandb open ```jobs\check_environment.job``` and put in your wandb api key, then run it.
 
 
-
-```#!/bin/bash
-
-#SBATCH --partition=gpu_a100
-#SBATCH --gpus=1
-#SBATCH --job-name=InstallEnvironment
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=18
-#SBATCH --time=03:00:00
-#SBATCH --output=/home/_snellius-name_/logs/out-%x.%A.out
-#SBATCH --error=/home/_snellius-name_/logs/err-%x.%A.err
-
-module purge
-module load 2024
-module load Miniconda3/24.7.1-0
-module load jax/0.3.14-foss-2022a-CUDA-11.7.0
-module load CUDA/12.6.0
-
-# Go to the directory that contains the conda env file and install it
-cd $HOME/seater
-conda create -n seater python=3.9.16 -y
-source activate seater
-pip install -r requirements.txt
-conda install -c conda-forge cudatoolkit=11.1
-```
 
 ---
 
 ## 📂 Download & Prepare Datasets
 
-Download the books data linked in the original readme, then make sure you update the ''datafile_par_path'' in config\const.py to point to that directory.
+Download the books data linked in the original readme, then make sure you update the ''datafile_par_path'' in ```config\const.py``` to point to that directory.
 
-### Example Dataset
-```bash
-mkdir -p data/example_dataset
-cd data/example_dataset
-wget xxxxx
-python -m src.preprocess_example_dataset.py xxxx
-cd ../..
-```
+For processing new datasets we have prepared some notebooks in ```\data\```. Note that these area a starting point, and are not fully functional out of the box.
+
+
 
 ---
 
@@ -72,45 +41,37 @@ cd ../..
 
 Set your parameters in the config file before training. Example:
 
-Reduced num_workers 32->16
-Reduced batch_size/test_batch_size 2048->256 
 
-I don't know what the maximum parameters are to make it work with snellius, but the default values were too big.
+I don't know what the maximum parameters are to make it work with snellius, but the default values were too big. Here is what I changed:
+Reduced num_workers 32->16.
+Reduced batch_size 2048->1024. 
+Reduced test_batch_size 2048->256. 
+
+Most of the parameters are added as flags in the run file.
+
+
 
 ---
 
 ## 🚀 5. Training
 
-### Baselines
+
 
 Run the following command to train the baseline:
 
-```bash
-python XXXX
-```
+```jobs\run.job```
 
-To perform inference:
+### Baselines
 
-```bash
-python XXXX
-```
+You can change the model flag to run both SASREC and SEATER. When running SEATER on a new dataset you will first have to train a SASREC model and extract embeddings from it.
 
-Alternatively, execute the following slurm jobs:
 
-```bash
-sbatch job_scripts/train_xxxxx.job
-sbatch job_scripts/infer_xxxxx.job
-```
-
----
 
 ## 📈 Evaluation
 
-After training, evaluate all models with:
+After training you can run evaluation only by commenting out the training step in ```main.py```.
 
-```bash
-python XXXX
-```
+The model is evaluated using ```utils\metrics.py```. To the utils I have added code for the beyond accuracy metrics IDL and GINI. Given the required data (item representation/categories) you can easily add these to the evaluation in the metrics file.
 
 ---
 
@@ -123,7 +84,6 @@ python XXXX
 
 This project repository uses the following frameworks / refers to the following papers:
 
-- XXX
-- XXX
+- SEATER: https://github.com/Ethan00Si/SEATER_Generative_Retrieval
 
 
