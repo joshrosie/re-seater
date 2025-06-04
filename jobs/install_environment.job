@@ -13,7 +13,6 @@
 module purge
 module load 2024
 module load Miniconda3/24.7.1-0
-module load jax/0.3.14-foss-2022a-CUDA-11.7.0
 module load CUDA/12.6.0
 
 # Go to the directory that contains the conda env file and install it
@@ -21,5 +20,4 @@ cd $HOME/seater
 conda create -n seater python=3.9.16 -y
 source activate seater
 pip install -r requirements.txt
-conda install -c conda-forge cudatoolkit=11.1
-pip install --upgrade torch 
+conda install -c conda-forge cudatoolkit=11.1 
