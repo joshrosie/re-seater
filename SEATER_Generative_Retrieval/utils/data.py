@@ -98,8 +98,6 @@ class SASREC_Dataset(SequenceDataset):
     def __init__(self, data_args, mode=None) -> None:
         super().__init__(data_args, mode)
 
-
-
 class SEATER_Dataset(SequenceDataset):
     def __init__(self, data_args, mode=None) -> None:
         super().__init__(data_args, mode)
