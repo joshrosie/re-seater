@@ -250,7 +250,6 @@ class CausalTransformerDecoderLayer(nn.TransformerDecoderLayer):
         )[0]
         tgt_last_tok = tgt_last_tok + self.dropout1(tmp_tgt)
         tgt_last_tok = self.norm1(tgt_last_tok)
-
         tgt_last_tok = self.norm2(tgt_last_tok + self._mha_block(tgt_last_tok, memory, memory_mask, memory_key_padding_mask))
         tgt_last_tok = self.norm3(tgt_last_tok + self._ff_block(tgt_last_tok))
 

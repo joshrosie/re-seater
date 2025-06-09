@@ -122,6 +122,16 @@ class SASREC(torch.nn.Module):
 
     def gather_indexes(self, output, gather_index):
         """Gathers the vectors at the specific positions over a minibatch"""
+        # --- START DEBUGGING ---
+        # --- START DEBUGGING ---
+        # print("--- Debugging gather_indexes ---")
+        # print("Shape of output tensor:", output.shape)
+        # print("Shape of gather_index tensor:", gather_index.shape)
+        # print("Max index in gather_index:", gather_index.max().item())
+        # print("Min index in gather_index:", gather_index.min().item())
+        # print("Size of dimension 1 in output tensor:", output.size(1))
+        # # --- END DEBUGGING ---
+
         gather_index = gather_index.view(-1, 1, 1).expand(-1, -1, output.shape[-1])
         output_tensor = output.gather(dim=1, index=gather_index)
         return output_tensor.squeeze(1)

@@ -251,8 +251,6 @@ class Trainer(object):
             step_next_items = \
                 user_item_record.loc[user_item_record['uid'].isin(step_uid.numpy())]\
                 ['next_item'].values #np.array(list[], list[],...,list[])
-
-            # group_pred_logits.extend(step_pred_logits.cpu().numpy())
             group_pred_items.extend(step_pred_item.cpu().numpy())
             group_next_items.extend(step_next_items)
 

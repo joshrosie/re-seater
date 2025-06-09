@@ -121,6 +121,37 @@ class SEATER_Dataset(SequenceDataset):
 
         self._construct_prefixe_aware_item_index_groups()
 
+        # self.validate_tree(
+        #     mapping_matrix=self.mapping_matrix,
+        #     item_index_groups=self.item_index_groups,
+        #     num_items=self.item_num,
+            
+        # )
+    
+    def validate_tree(self,mapping_matrix, item_index_groups, num_items):
+        used_nodes = set(mapping_matrix[:, :-1].flatten())
+        unused_nodes = []
+
+        print(f"\n[INFO] Total items: {num_items}")
+        print(f"[INFO] Mapping matrix shape: {mapping_matrix.shape}")
+        print(f"[INFO] Total nodes in item_index_groups: {len(item_index_groups)}")
+
+        for i in range(len(item_index_groups)):
+            if len(item_index_groups[i]) == 0 and i not in used_nodes:
+                unused_nodes.append(i)
+
+        print(f"[CHECK] Unused nodes: {len(unused_nodes)}")
+        if unused_nodes:
+            print(f"First 10 unused nodes: {unused_nodes[:10]}")
+        
+        
+
+        # Print some sample item paths
+        print("\n[INFO] Sample item paths:")
+        for i in range(min(100, num_items)):
+            print(f"Item {i}: {mapping_matrix[i]}")
+
+
     def _construct_prefixe_aware_item_index_groups(self):
         '''
         create mapping from each token to identifiers containing this token
@@ -166,6 +197,7 @@ class SEATER_Dataset(SequenceDataset):
         sample_nodes = sample_nodes[-self.num_neg:]
         neg_item_index_ls = []
         for node in sample_nodes:
+            
             all_possible_items = self.item_index_groups[node]
             
             neg_item = random.choice(all_possible_items)
