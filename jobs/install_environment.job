@@ -5,8 +5,8 @@
 #SBATCH --job-name=InstallEnvironment
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
-#SBATCH --output=/home/scur0993/logs/out-%x.%A.out
-#SBATCH --error=/home/scur0993/logs/err-%x.%A.err
+#SBATCH --output=/home/scur2759/logs/out-%x.%A.out
+#SBATCH --error=/home/scur2759/logs/err-%x.%A.err
 #SBATCH --time=03:00:00 
 # This is slow the first time
 
@@ -17,7 +17,7 @@ module load jax/0.3.14-foss-2022a-CUDA-11.7.0
 module load CUDA/12.6.0
 
 # Go to the directory that contains the conda env file and install it
-cd $HOME/seater
+cd $HOME/re-seater
 conda create -n seater python=3.9.16 -y
 source activate seater
 pip install -r requirements.txt

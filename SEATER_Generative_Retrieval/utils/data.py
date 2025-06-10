@@ -234,6 +234,94 @@ class SEATER_Dataset(SequenceDataset):
             )
         
         return cur_tensor
+
+
+class BERT4REC_Dataset(Dataset):
+    def __init__(self, data_args, mode=None) -> None:
+        super().__init__()
+        assert mode in ['training', 'validation', 'test'], 'Invalid mode!'
+        self.mode = mode
+        self.dm = data_args
+
+        self.reco_his_max_len = self.dm.reco_his_max_length
+        self.mask_token = self.dm.item_ID_num + 1
+        self.mask_prob = self.dm.mask_prob
+
+        print('mask token: {}, mask prob: {}'.format(self.mask_token, self.mask_prob))
+        print('reco_his_max_len: {}'.format(self.reco_his_max_len))
+
+        self._build()
+
+    def _build(self):
+        if self.mode == 'training':
+            df = data_utils.load_tsv_file(
+                self.dm.datafile_par_path, self.dm.training_file, sep='\t', engine="pyarrow")
+            df.columns = ['uid', 'his_seq']
+        elif self.mode == 'validation':
+            df = data_utils.load_tsv_file(
+                self.dm.datafile_par_path, self.dm.validation_file, sep='\t', engine="pyarrow")
+            df.columns = ['uid', 'his_seq', 'next_item']
+            df['next_item'] = df['next_item'].apply(lambda x: eval(x))
+        elif self.mode == 'test':
+            df = data_utils.load_tsv_file(
+                self.dm.datafile_par_path, self.dm.test_file, sep='\t', engine="pyarrow")
+            df.columns = ['uid', 'his_seq', 'next_item']
+            df['next_item'] = df['next_item'].apply(lambda x: eval(x))
+
+        self.record = df
+        print('build {} dataset successfully'.format(self.mode))
+
+    def __len__(self):
+        return len(self.record)
+
+    def _pad_seq(self, seq, is_training=True):
+        seq = seq[-self.reco_his_max_len:]
+        if is_training:
+            return [0] * (self.reco_his_max_len+1 - len(seq)) + seq
+        else:
+            return [0] * (self.reco_his_max_len - len(seq)) + seq + [0]
+
+    def __getitem__(self, index):
+        row = self.record.iloc[index]
+        uid = row['uid']
+        his_seq = eval(row['his_seq']) if isinstance(row['his_seq'], str) else row['his_seq']
+        if self.mode == 'training':
+            his_seq = self._pad_seq(his_seq)
+            tokens, labels = self._random_mask(his_seq)
+            return (
+                torch.tensor(uid, dtype=torch.long),
+                torch.tensor(tokens, dtype=torch.long),
+                torch.tensor(labels, dtype=torch.long)
+            )
+        else:
+            # Find the position of the last real item
+            his_seq = self._pad_seq(his_seq, is_training=False)
+            # real_len = sum([1 for x in his_seq if x != 0])
+            # if real_len == 0:
+            #     raise ValueError("Sequence is all padding; cannot insert mask.")
+            # his_seq[real_len] = self.mask_token
+            
+            his_seq[-1] = self.mask_token
+            return (
+                torch.tensor(uid, dtype=torch.long),
+                torch.tensor(his_seq, dtype=torch.long)
+            )
+
+
+    def _random_mask(self, seq):
+        tokens, labels = [], []
+        for item in seq:
+            if item == 0:
+                tokens.append(0)
+                labels.append(0)
+                continue
+            if random.random() < self.mask_prob:
+                tokens.append(self.mask_token)
+                labels.append(item)
+            else:
+                tokens.append(item)
+                labels.append(0)
+        return tokens, labels
     
 
 GLOBAL_SEED = 1
