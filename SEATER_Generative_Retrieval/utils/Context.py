@@ -67,7 +67,7 @@ class ContextManager(object):
 
 class DatasetManager(object):
 
-    def __init__(self, flags_obj):
+    def __init__(self, flags_obj, new_config=None):
 
         self.dataset_name = flags_obj.dataset_name
         self.batch_size = flags_obj.batch_size
@@ -76,6 +76,9 @@ class DatasetManager(object):
         dataset_config = getattr(const_utils, '{}_Config'.format(self.dataset_name))()
         for key, value in dataset_config.__dict__.items():
             setattr(self, key, value)
+
+        if new_config is not None and 'mask_prob' in new_config.keys():
+            self.mask_prob = new_config['mask_prob']
 
         logging.info('dataset: {}'.format(self.dataset_name))
 

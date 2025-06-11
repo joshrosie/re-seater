@@ -20,7 +20,6 @@ from utils import Context as ctxt
 from utils.metrics import eva
 from model import *
 
-
 class Trainer(object):
 
     def __init__(self, flags_obj, cm,  dm, new_config=None):
@@ -138,8 +137,16 @@ class Trainer(object):
 
     def train(self):
 
-        self.optimizer = optim.Adam(self.model.parameters(), \
+        # self.optimizer = optim.Adam(self.model.parameters(), \
+        #                 lr=self.model_config['lr'], weight_decay=self.model_config['weight_decay'])
+        if 'betas' in self.model_config:
+            self.optimizer = optim.Adam(self.model.parameters(), \
+                        lr=self.model_config['lr'], weight_decay=self.model_config['weight_decay'], 
+                        betas=tuple(self.model_config['betas']))
+        else:
+            self.optimizer = optim.Adam(self.model.parameters(), \
                         lr=self.model_config['lr'], weight_decay=self.model_config['weight_decay'])
+
         self.esm = ctxt.EarlyStopManager(self.model_config) # early-stop manager
 
         best_metric = 0
@@ -481,3 +488,82 @@ class SEATER_Trainer(Trainer):
         train_loss[0] = epoch_decode_loss
         train_loss[1] = epoch_rk_loss
         train_loss[2] = epoch_sm_loss
+
+
+
+class BERT4REC_Trainer(Sequence_Dual_Encoder_Trainer):
+    def __init__(self, flags_obj, cm, dm, new_config=None):
+        super().__init__(flags_obj, cm, dm, new_config)
+
+    def set_model(self):
+        
+        self.model = BERT4REC(self.model_config, random_seed=self.flags_obj.random_seed)
+
+        logging.info('model config:')
+        for k, v in self.model_config.items():
+            logging.info(f'{k}: {v}')
+
+    def _get_loss(self, sample):
+        """
+        Args:
+            sample -> tuple : (tokens, labels) from BERT4REC_Dataset
+        Return:
+            loss -> torch.tensor scalar
+        """
+        return self.model(sample)
+
+    def _get_prediction(self, sample, topK):
+        """
+        Args:
+            sample -> torch.tensor (B, L): token input with [MASK]
+        Return:
+            pred_logits, pred_item_ID: torch.tensor (N, topK)
+        """
+        return self.model.predict(sample, topK)
+
+    def train_one_epoch(self, epoch, train_loss):
+
+        epoch_loss = train_loss[0]
+
+        self.model.train()
+
+        tqdm_ = tqdm(iterable=self.train_dataloader, mininterval=1, ncols=100)
+        for step, sample in enumerate(tqdm_):
+
+            self.optimizer.zero_grad()
+
+            sample = tuple(input_data.to(self.device) for input_data in sample)
+            
+            loss = self._get_loss(sample)
+
+            if torch.isnan(loss):
+                raise ValueError('loss is NaN!')
+                # print('loss is NaN!')
+
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=5.0, norm_type=2)
+            self.optimizer.step()
+            
+            epoch_loss += loss.item()
+            # print(self.train_dataloader.__len__())
+            if step % (self.train_dataloader.__len__() // 50) == 0 and step != 0:
+                current_loss = epoch_loss / (step+1+epoch*self.train_dataloader.__len__())
+                tqdm_.set_description(
+                        "epoch {:d} , step {:d} , loss: {:.4f}".format(epoch, step+1, current_loss))
+                
+                # Log to TensorBoard
+                if self.writer and self.flags_obj.train_tb:
+                    self.writer.add_scalar("training_loss", current_loss, 
+                                         step+1+epoch*self.train_dataloader.__len__())
+                
+                # Log to WandB
+                if self.flags_obj.use_wandb:
+                    wandb.log({
+                        "train/loss": current_loss,
+                        "train/epoch": epoch,
+                        "train/step": step+1+epoch*self.train_dataloader.__len__()
+                    })
+                    
+        logging.info('epoch {}:  loss = {}'.format(epoch, epoch_loss/(step+1+epoch*self.train_dataloader.__len__())))
+
+        train_loss[0] = epoch_loss
