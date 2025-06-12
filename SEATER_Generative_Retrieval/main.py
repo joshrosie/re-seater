@@ -7,6 +7,7 @@ import random
 import os
 import multiprocessing
 import wandb
+import yaml
 
 
 def main():
@@ -79,7 +80,12 @@ def main():
         )
 
     cm = ContextManager(args)
-    dm = DatasetManager(args)
+
+    path = 'config/{}/{}.yaml'.format(args.dataset_name, args.model)
+    f = open(path)
+    tmp_config = yaml.load(f, Loader=yaml.FullLoader)
+
+    dm = DatasetManager(args, tmp_config)
 
     trainer = cm.set_trainer(args, cm, dm, new_config)
 
