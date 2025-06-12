@@ -345,6 +345,17 @@ class SASREC_Trainer(Sequence_Dual_Encoder_Trainer):
         for k,v in self.model_config.items():
             logging.info('{}: {}'.format(k, v))
 
+class GRU4REC_Trainer(Sequence_Dual_Encoder_Trainer):
+    def __init__(self, flags_obj, cm, dm, new_config=None):
+        super().__init__(flags_obj, cm, dm, new_config)
+
+    def set_model(self):
+        self.model = GRU4REC(self.model_config)
+
+
+        logging.info('model config:')
+        for k,v in self.model_config.items():
+            logging.info('{}: {}'.format(k, v))
 
 
 class SEATER_Trainer(Trainer):

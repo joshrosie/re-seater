@@ -2,7 +2,7 @@
 
 #SBATCH --partition=gpu_h100
 #SBATCH --gpus=1
-#SBATCH --job-name=RunBERT4RECYelp
+#SBATCH --job-name=RunGRU4REC_MIND
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=05:00:00
@@ -34,5 +34,13 @@ srun python main.py --name BERT4REC_YELP --dataset_name Yelp --num_workers 16 --
 
 # Mind
 #srun python main.py --name SASREC_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model SASREC --vocab 8 --epochs 50 --wandb_project sasrec
+# srun python main.py --name SEATER_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --wandb_project seater 
+
+# GRU4Rec
+# srun python main.py --name GRU4REC_BOOKS --dataset_name Books --num_workers 16 --gpu_id 0 --model GRU4REC --wandb_project seater 
+# srun python main.py --name GRU4REC_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model GRU4REC --wandb_project seater 
+# srun python main.py --name GRU4REC_MIND --dataset_name MIND --num_workers 16 --gpu_id 0 --model GRU4REC --wandb_project seater 
+
 #srun python main.py --name SEATER_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --wandb_project seater
 #srun python main.py --name BERT4REC_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model BERT4REC --wandb_project bert4rec --epochs 50
+

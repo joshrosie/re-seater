@@ -23,7 +23,7 @@ class PointWiseFeedForward(torch.nn.Module):
     def forward(self, inputs):
         outputs = self.dropout2(self.conv2(self.relu(self.dropout1(self.conv1(inputs.transpose(-1, -2))))))
         outputs = outputs.transpose(-1, -2) # as Conv1D requires (N, C, Length)
-        outputs += inputs
+        outputs += inputs 
         return outputs
 
 
