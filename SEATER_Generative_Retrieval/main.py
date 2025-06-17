@@ -55,6 +55,7 @@ def main():
         'Yelp': {'batch_size': 256, 'test_batch_size': 1024, 'epochs': 50},
         'MIND': {'batch_size': 256, 'test_batch_size': 1024, 'epochs': 50},
         'Books': {'batch_size': 2048, 'test_batch_size': 2048, 'epochs': 60},
+        'Yambda': {'batch_size': 2048, 'test_batch_size': 1024, 'epochs': 60},
     }
     if args.batch_size == 0 : args.batch_size = dataset_paras[args.dataset_name]['batch_size'] 
     if args.test_batch_size == 0: args.test_batch_size = dataset_paras[args.dataset_name]['test_batch_size'] 

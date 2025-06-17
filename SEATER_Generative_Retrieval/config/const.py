@@ -3,8 +3,8 @@ class Books_Config(object):
     def __init__(self) -> None:
         
         # data file path
+        # self.datafile_par_path = './data_bert4rec/Books'
         self.datafile_par_path = './data/Books'
-        # self.datafile_par_path = './data/Books'
         self.training_file = 'dataset/training.tsv'
         self.validation_file = 'dataset/validation.tsv'
         self.test_file = 'dataset/test.tsv'
@@ -32,6 +32,7 @@ class Yelp_Config(object):
         
         # data file path
         self.datafile_par_path = './data/Yelp'
+        # self.datafile_par_path = './data_bert4rec/Yelp'
         self.training_file = 'dataset/training.tsv'
         self.validation_file = 'dataset/validation.tsv'
         self.test_file = 'dataset/test.tsv'
@@ -56,15 +57,15 @@ class MIND_Config(object):
     def __init__(self) -> None:
         
         # data file path
-        #self.datafile_par_path = '../../MIND/MIND'
         self.datafile_par_path = './data/MIND'
+        # self.datafile_par_path = './data_bert4rec/MIND'
         # self.training_file = 'dataset/training.tsv'
         # self.validation_file = 'dataset/validation.tsv'
         # self.test_file = 'dataset/test.tsv'
 
-        self.training_file = 'dataset_impressions_concatenated/training.tsv'
-        self.validation_file = 'dataset_impressions_concatenated/validation.tsv'
-        self.test_file = 'dataset_impressions_concatenated/test.tsv'
+        self.training_file = 'dataset/training.tsv'
+        self.validation_file = 'dataset/validation.tsv'
+        self.test_file = 'dataset/test.tsv'
 
         # for tree-based index
         #self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
@@ -79,6 +80,31 @@ class MIND_Config(object):
         #self.item_ID_num = 39815 + 1 # Ours: Using history and predicting only positive impressions
         #self.item_ID_num = 33195 + 1 # Ours: Using only the history without the impressions
         self.item_ID_num = 39865 + 1  # Ours: Using history concatenated with positive impressions
+        # experiment const config
+        self.reco_his_max_length = 20 
+
+class Yambda_Config(object):
+    def __init__(self) -> None:
+        
+        # data file path
+        self.datafile_par_path = './data/Yambda'
+        # self.datafile_par_path = './data_bert4rec/Yambda'
+
+        self.training_file = 'dataset/training.tsv'
+        self.validation_file = 'dataset/validation.tsv'
+        self.test_file = 'dataset/test.tsv'
+
+        # for tree-based index
+        #self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
+        self.tree_data_par_path = './data/Yambda/tree_data_SASREC'
+        self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'      
+        self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
+    
+        self.two_tower_item_emb = 'vocab/Yambda_SASREC_item_emb.npy'
+
+        #dataset config
+        #self.users_ID_num = 50000
+        self.item_ID_num = 475910 + 1  # TODO: Maybe try branching factor 16 for the seater tree as in books
         # experiment const config
         self.reco_his_max_length = 20 
 
