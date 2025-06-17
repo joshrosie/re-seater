@@ -213,7 +213,7 @@ class Trainer(object):
         train_loss[0] = epoch_loss
 
     @torch.no_grad()
-    def evaluate(self, total_loss=None, epoch=0):
+    def evaluate(self, total_loss=None, epoch=0, num_items=0, id2cat=None):
         """Evaluate the model on validation/test data set
         
         Args:
@@ -231,13 +231,13 @@ class Trainer(object):
         )
 
         if epoch != 'test':
-
+           
             return eva(pre = group_pred_items, ground_truth = group_next_items)
         
         else:
-
+            print("in evaluate")
             # comi_ndcg = eva(pre = group_pred_items, ground_truth = group_next_items, comi_ndcg=True)
-            res = eva(pre = group_pred_items, ground_truth = group_next_items, comi_ndcg=False)
+            res = eva(pre = group_pred_items, ground_truth = group_next_items, num_items=num_items,comi_ndcg=False, id2cat=id2cat)
 
             return res
         
@@ -281,7 +281,7 @@ class Trainer(object):
         return results['recall@50']
     
 
-    def test(self, assigned_model_path = None, load_config=True):
+    def test(self, assigned_model_path = None, load_config=True, num_items=0, id2cat=None):
         '''
             test model on test dataset
         '''
@@ -289,7 +289,7 @@ class Trainer(object):
         if load_config:
             self.load_ckpt(assigned_path = assigned_model_path)
 
-        results = self.evaluate(epoch='test')
+        results = self.evaluate(epoch='test', num_items=num_items, id2cat = id2cat)
 
         logging.info('TEST results :')
         self.record_metrics('test', results)
