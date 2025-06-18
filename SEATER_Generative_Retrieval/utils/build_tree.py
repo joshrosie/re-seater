@@ -162,35 +162,87 @@ def cluster(input_items, item_emb_matrix, k:int, is_balanced: bool):
 
     return results_items
 
-def hierarchical_clustering(items, item_emb_matrix, k:int, is_balanced:bool):
+# def hierarchical_clustering(items, item_emb_matrix, k:int, is_balanced:bool):
+#     J = []
+#     new_items = []
+
+#     cluster_items = cluster(items, item_emb_matrix, k, is_balanced)
+#     # cluster_items = cluster(items, item_emb_matrix, k, False) # imbalanced tree
+#     # cluster_items = random_cluster(items, item_emb_matrix, k, is_balanced) # random construct trees
+
+#     for i in range(k):
+#         J_current = [str(i)] * len(cluster_items[i])
+
+#         if len(cluster_items[i]) > k:
+#             rest_indexIDs, rest_new_items = hierarchical_clustering(cluster_items[i], item_emb_matrix, k, is_balanced)
+#         else:
+#             if len(cluster_items[i]) == 1:
+#                 rest_indexIDs = [None]
+#             else:
+#                 rest_indexIDs = [str(i) for i in range(len(cluster_items[i]))]
+#             rest_new_items = cluster_items[i]
+#         J_cluster = [ ' '.join([J_current[i], rest_indexIDs[i]]) if rest_indexIDs[i]!= None else J_current[i]
+#                       for i in range(len(J_current))
+#                     ]
+#         new_items_cluster = rest_new_items
+
+#         J.extend(J_cluster)
+#         new_items.extend(new_items_cluster)
+
+        
+#     return J, new_items
+
+def hierarchical_clustering(items, item_emb_matrix, k: int, is_balanced: bool,
+                            max_kmeans_level: Optional[int] = 3,
+                            level: int = 0):
+    """
+    Recursive hierarchical clustering with optional random clustering beyond a certain level.
+    
+    Args:
+        items: list of item IDs to be clustered
+        item_emb_matrix: full item embedding matrix
+        k: number of clusters per level
+        is_balanced: whether to use constrained k-means
+        max_kmeans_level: after this level, use random clustering
+        level: current recursion depth
+    """
     J = []
     new_items = []
 
-    cluster_items = cluster(items, item_emb_matrix, k, is_balanced)
-    # cluster_items = cluster(items, item_emb_matrix, k, False) # imbalanced tree
-    # cluster_items = random_cluster(items, item_emb_matrix, k, is_balanced) # random construct trees
+    # Decide clustering method
+    if max_kmeans_level is not None and level >= max_kmeans_level:
+        cluster_items = random_cluster(items, item_emb_matrix, k, is_balanced)
+    else:
+        cluster_items = cluster(items, item_emb_matrix, k, is_balanced)
 
     for i in range(k):
+        if len(cluster_items[i]) == 0:
+            continue
+
         J_current = [str(i)] * len(cluster_items[i])
 
         if len(cluster_items[i]) > k:
-            rest_indexIDs, rest_new_items = hierarchical_clustering(cluster_items[i], item_emb_matrix, k, is_balanced)
+            rest_indexIDs, rest_new_items = hierarchical_clustering(
+                cluster_items[i], item_emb_matrix, k, is_balanced,
+                max_kmeans_level=max_kmeans_level, level=level + 1)
         else:
             if len(cluster_items[i]) == 1:
                 rest_indexIDs = [None]
             else:
                 rest_indexIDs = [str(i) for i in range(len(cluster_items[i]))]
             rest_new_items = cluster_items[i]
-        J_cluster = [ ' '.join([J_current[i], rest_indexIDs[i]]) if rest_indexIDs[i]!= None else J_current[i]
-                      for i in range(len(J_current))
-                    ]
+
+        J_cluster = [
+            ' '.join([J_current[j], rest_indexIDs[j]]) if rest_indexIDs[j] is not None else J_current[j]
+            for j in range(len(J_current))
+        ]
         new_items_cluster = rest_new_items
 
         J.extend(J_cluster)
         new_items.extend(new_items_cluster)
 
-        
     return J, new_items
+
 
 
 
