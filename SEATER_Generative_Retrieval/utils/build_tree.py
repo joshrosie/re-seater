@@ -272,7 +272,7 @@ import os
 import warnings
 import time
 from k_means_constrained import KMeansConstrained
-
+from sklearn.cluster import KMeans
 
 # --- DEPENDENCIES ---
 # This script now requires both faiss and scikit-learn
@@ -303,15 +303,21 @@ def faiss_cluster_balanced(input_items, item_emb_matrix, k: int, gpu: bool = Tru
     """
     X = item_emb_matrix[input_items].astype('float32')
     n_samples, d = X.shape
+    faiss_threshold = 100 # Threshold for using Faiss Kmeans
 
     if k <= 0: return []
     if n_samples < k: return [np.array([item]) for item in input_items]
 
-    # Step 1: Find optimal centroids with faiss.Kmeans
-    num_gpus = faiss.get_num_gpus() if gpu else 0
-    kmeans = faiss.Kmeans(d=d, k=k, niter=20, nredo=5, verbose=False, gpu=(num_gpus > 0))
-    kmeans.train(X)
-    centroids = kmeans.centroids
+    if len(input_items)>faiss_threshold:
+        # Step 1: Find optimal centroids with faiss.Kmeans
+        num_gpus = faiss.get_num_gpus() if gpu else 0
+        kmeans = faiss.Kmeans(d=d, k=k, niter=20, nredo=5, verbose=False, gpu=(num_gpus > 0))
+        kmeans.train(X)
+        centroids = kmeans.centroids
+    else:
+        kmeans = KMeans(n_clusters=k, n_init=5, max_iter=20, verbose=0, random_state=42)
+        kmeans.fit(X)
+        centroids = kmeans.cluster_centers_
 
     # Step 2: Perform a fast, greedy balanced assignment
     D = np.zeros((n_samples, k), dtype='float32')

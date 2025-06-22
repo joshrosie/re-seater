@@ -12,7 +12,8 @@ class Books_Config(object):
 
         # for tree-based index
         #self.tree_data_par_path = './data/Books/tree_data_SASREC'
-        self.tree_data_par_path = './data/Books/tree_data_SASREC_hybrid'
+        #self.tree_data_par_path = './data/Books/tree_data_SASREC_hybrid'
+        self.tree_data_par_path = './data/Books/tree_data_SASREC_speedup_sklearn'
 
         # self.tree_data_par_path = './data/Books/tree_data_SASREC'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'
@@ -41,7 +42,11 @@ class Yelp_Config(object):
 
         # for tree-based index
         #self.tree_data_par_path = './data/Yelp/tree_data_SASREC'
-        self.tree_data_par_path = './data/Yelp/tree_data_SASREC_hybrid'
+        # self.tree_data_par_path = './data/Yelp/tree_data_SASREC_hybrid'
+        #self.tree_data_par_path = './data/Yelp/tree_data_SASREC_speedup'
+        #self.tree_data_par_path = './data/Yelp/tree_data_SASREC_normal'
+        self.tree_data_par_path = './data/Yelp/tree_data_SASREC_speedup_sklearn'
+
         # self.tree_data_par_path = './data/Yelp/tree_data_SASREC'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
@@ -72,7 +77,11 @@ class MIND_Config(object):
 
         # for tree-based index
         #self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
-        self.tree_data_par_path = './data/MIND/tree_data_SASREC'
+        #self.tree_data_par_path = './data/MIND/tree_data_SASREC'
+        #self.tree_data_par_path = './data/MIND/tree_data_SASREC_hybrid'
+        #self.tree_data_par_path = './data/MIND/tree_data_SASREC_speedup'
+        #self.tree_data_par_path = './data/MIND/tree_data_SASREC_normal'
+        self.tree_data_par_path = './data/MIND/tree_data_SASREC_speedup_sklearn'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'      
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
     
@@ -101,7 +110,9 @@ class Yambda_Config(object):
         #self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
         #self.tree_data_par_path = './data/Yambda/tree_data_SASREC'
         #self.tree_data_par_path = './data/Yambda/tree_data_SASREC_hybrid'
-        self.tree_data_par_path = './data/Yambda/tree_data_SASREC_speedup'
+        #self.tree_data_par_path = './data/Yambda/tree_data_SASREC_speedup'
+        #self.tree_data_par_path = './data/Yambda/tree_data_SASREC_normal'
+        self.tree_data_par_path = './data/Yambda/tree_data_SASREC_speedup_sklearn'
 
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'      
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
