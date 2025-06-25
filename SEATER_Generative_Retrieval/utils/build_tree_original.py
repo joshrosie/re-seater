@@ -7,9 +7,10 @@ from k_means_constrained import KMeansConstrained
 from typing import Optional
 import os
 import warnings
+import time
 
 
-def build_hieraichical_clustering_tree(
+def build_hieraichical_clustering_tree_original(
         item_emb_path : str, 
         output_file_path : str, 
         vocab_size : int = 10, 
@@ -20,6 +21,7 @@ def build_hieraichical_clustering_tree(
         vocab_size: number of the trie's branches
 
     '''
+    start_all = time.time()
     warnings.filterwarnings('ignore')
 
     all_item_emb = np.load(item_emb_path)
@@ -36,9 +38,13 @@ def build_hieraichical_clustering_tree(
     print('start hierarchical clustering')
 
     '''hierarchical clustering items'''
+    start_clustering = time.time()
     indexIDs, itemIDs = hierarchical_clustering(all_items, all_item_emb, vocab_size, is_balanced)
+    end_clustering = time.time()
+    print(f'Hierarchical clustering finished in {end_clustering - start_clustering:.2f}s')
 
     print('start build the prefix tree')
+    start_tree = time.time()
     '''build prefix tree'''
     builder = TreeBuilder(start_token, num_items)
     tree_node_index_ls = []
@@ -58,6 +64,7 @@ def build_hieraichical_clustering_tree(
     itemID_2_tree_indexID = itemID_2_tree_indexID[:, :-1] 
 
     print('build tree successfully')
+    end_tree = time.time()
 
     root = builder.build()
 
@@ -79,6 +86,12 @@ def build_hieraichical_clustering_tree(
     tree_node_allowed_next_tokens[num_items+2][0] = end_token
     tree_node_allowed_next_tokens[num_items+2][1:] = [pad_token]*(vocab_size-1)
 
+    end_all = time.time()
+    print(f'\n✅ Total execution time: {end_all - start_all:.2f}s')
+    print(f' - Clustering time: {end_clustering - start_clustering:.2f}s')
+    print(f' - Tree building time: {end_tree - start_tree:.2f}s')
+
+
     if not os.path.exists(output_file_path):
         os.mkdir(output_file_path)
 
@@ -86,6 +99,35 @@ def build_hieraichical_clustering_tree(
     np.save(f'{output_file_path}/tree_node_allowed_next_tokens.npy', tree_node_allowed_next_tokens,  allow_pickle=True)
 
     print('finish tree building and save files successfully!')
+
+    print(f'\nFinish tree building successfully! Files saved in "{output_file_path}"')
+
+
+    num_nodes = len(tree_node)
+    num_leaves = sum(1 for children in allowed_next_tokens_ls if len(children) == 0)
+    avg_branching = np.mean([len(children) for children in allowed_next_tokens_ls if children]) if allowed_next_tokens_ls else 0
+    max_depth = max(len(p.split()) for p in indexIDs) if indexIDs else 0
+
+    print(f'\n🌲 Tree statistics:')
+    print(f' - Total nodes: {num_nodes}')
+    print(f' - Leaf nodes: {num_leaves}')
+    print(f' - Average branching factor: {avg_branching:.2f}')
+    print(f' - Max tree depth (estimated): {max_depth}')
+
+    print(f'\n📐 Output arrays:')
+    print(f' - itemID_2_tree_indexID shape: {itemID_2_tree_indexID.shape}')
+    print(f' - tree_node_allowed_next_tokens shape: {tree_node_allowed_next_tokens.shape}')
+    non_pad = np.sum(tree_node_allowed_next_tokens != pad_token)
+    total = tree_node_allowed_next_tokens.size
+    print(f' - tree_node_allowed_next_tokens sparsity: {non_pad / total:.2%} non-pad entries')
+
+    path_lengths = [len(path.split()) for path in indexIDs]
+    print(f"\n📏 Path length statistics:")
+    print(f" - Min: {np.min(path_lengths)}")
+    print(f" - Max: {np.max(path_lengths)}")
+    print(f" - Mean: {np.mean(path_lengths):.2f}")
+    print(f" - Median: {np.median(path_lengths)}")
+
 
 def random_cluster(input_items, item_emb_matrix, k:int, is_balanced: bool):
     results_items = []
@@ -162,7 +204,8 @@ def cluster(input_items, item_emb_matrix, k:int, is_balanced: bool):
 
     return results_items
 
-def hierarchical_clustering(items, item_emb_matrix, k:int, is_balanced:bool):
+def hierarchical_clustering(items, item_emb_matrix, k:int, is_balanced:bool, level=0):
+    start_time = time.time()
     J = []
     new_items = []
 
@@ -170,11 +213,14 @@ def hierarchical_clustering(items, item_emb_matrix, k:int, is_balanced:bool):
     # cluster_items = cluster(items, item_emb_matrix, k, False) # imbalanced tree
     # cluster_items = random_cluster(items, item_emb_matrix, k, is_balanced) # random construct trees
 
+    level_time = time.time() - start_time
+    print(f"[LEVEL {level}] Clustering {len(items)} items into {k} clusters took {level_time:.2f}s")
+
     for i in range(k):
         J_current = [str(i)] * len(cluster_items[i])
 
         if len(cluster_items[i]) > k:
-            rest_indexIDs, rest_new_items = hierarchical_clustering(cluster_items[i], item_emb_matrix, k, is_balanced)
+            rest_indexIDs, rest_new_items = hierarchical_clustering(cluster_items[i], item_emb_matrix, k, is_balanced, level+1)
         else:
             if len(cluster_items[i]) == 1:
                 rest_indexIDs = [None]
