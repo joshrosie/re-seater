@@ -15,7 +15,8 @@ import os
 import wandb
 
 import utils.data as data
-from utils.build_tree import build_hieraichical_clustering_tree
+from utils.build_tree_original import build_hieraichical_clustering_tree_original
+from utils.build_tree_speedup import build_hieraichical_clustering_tree_speedup
 from utils import Context as ctxt
 from utils.metrics import eva
 from model import *
@@ -43,6 +44,8 @@ class Trainer(object):
         self.set_model()
         self.set_dataloader()
         self.model = self.model.to(self.device)
+        self.tree_building = flags_obj.tree_building # options are 'speedup', 'hybrid', 'original'
+        
         
     def set_device(self):
         if not self.flags_obj.use_gpu:
@@ -383,11 +386,30 @@ class SEATER_Trainer(Trainer):
         # build tree index structure
         self.dm.tree_data_par_path = os.path.join(self.dm.tree_data_par_path, f'{self.flags_obj.vocab}_branch_tree')
         if not os.path.exists(f'{self.dm.tree_data_par_path}/itemID_2_tree_indexID.npy'):
-            build_hieraichical_clustering_tree(
+            if self.tree_building == 'speedup':
+                # use the speedup version of the tree index
+                build_hieraichical_clustering_tree_speedup(
+                item_emb_path = os.path.join(self.dm.datafile_par_path, self.dm.two_tower_item_emb),
+                output_file_path = self.dm.tree_data_par_path,
+                vocab_size = self.flags_obj.vocab,
+                num_items_for_greedy = 0
+            )
+            elif self.tree_building == 'hybrid':
+                # use the hybrid version of the tree index
+                build_hieraichical_clustering_tree_speedup(
+                item_emb_path = os.path.join(self.dm.datafile_par_path, self.dm.two_tower_item_emb),
+                output_file_path = self.dm.tree_data_par_path,
+                vocab_size = self.flags_obj.vocab,
+                num_items_for_greedy = 2000
+            )
+            elif self.tree_building == 'original':
+                # use the original version of the tree index
+                build_hieraichical_clustering_tree_original(
                 item_emb_path = os.path.join(self.dm.datafile_par_path, self.dm.two_tower_item_emb),
                 output_file_path = self.dm.tree_data_par_path,
                 vocab_size = self.flags_obj.vocab
             )
+            
         self.dm.num_neg = self.model_config['rk_num_neg']
 
         self.set_dataloader()

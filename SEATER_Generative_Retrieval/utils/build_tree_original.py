@@ -10,7 +10,7 @@ import warnings
 import time
 
 
-def build_hieraichical_clustering_tree(
+def build_hieraichical_clustering_tree_original(
         item_emb_path : str, 
         output_file_path : str, 
         vocab_size : int = 10, 

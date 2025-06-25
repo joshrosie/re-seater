@@ -34,7 +34,8 @@ def main():
     parser.add_argument('--test_batch_size', type=int, help='testing batch_size', default=0)
     parser.add_argument('--vocab', type=int, help='#branches of tree structure', default=8)
     parser.add_argument('--random_seed', type=int, help='random seed', default=2023)
-
+    # Choose a tree building flag between allowed options 'speedup', 'hybrid' and 'original'
+    parser.add_argument('--tree_building', type=str, help='tree building method', default='original', choices=['speedup', 'hybrid', 'original'])
     parser.add_argument('--new_config', type=str, help='update model config', default='')
 
     args = parser.parse_args()
