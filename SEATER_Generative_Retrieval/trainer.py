@@ -43,9 +43,7 @@ class Trainer(object):
         # self.judger = judge() # calculate metrics
         self.set_model()
         self.set_dataloader()
-        self.model = self.model.to(self.device)
-        self.tree_building = flags_obj.tree_building # options are 'speedup', 'hybrid', 'original'
-        
+        self.model = self.model.to(self.device)        
         
     def set_device(self):
         if not self.flags_obj.use_gpu:
@@ -370,6 +368,7 @@ class SEATER_Trainer(Trainer):
             dm : dataset manager
             new config : update default model config to tune hyper-parameters
         """
+        self.tree_building = flags_obj.tree_building
         self.cm = cm #context manager
         self.dm = dm #dataset manager
         self.flags_obj = flags_obj
