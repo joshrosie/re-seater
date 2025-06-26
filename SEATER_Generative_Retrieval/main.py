@@ -34,6 +34,9 @@ def main():
     parser.add_argument('--test_batch_size', type=int, help='testing batch_size', default=0)
     parser.add_argument('--vocab', type=int, help='#branches of tree structure', default=8)
     parser.add_argument('--random_seed', type=int, help='random seed', default=2023)
+    parser.add_argument('--train_path', type=str, help='file path to training file of the chosen dataset', default='')
+    parser.add_argument('--popularity_weighting_strategy', type=str, help='popularity weighting strategy', default='')
+
 
     parser.add_argument('--new_config', type=str, help='update model config', default='')
 
@@ -88,7 +91,7 @@ def main():
 
     dm = DatasetManager(args, tmp_config)
 
-    trainer = cm.set_trainer(args, cm, dm, new_config)
+    trainer = cm.set_trainer(args, cm, dm, new_config, train_path=args.train_path)
 
     trainer.train()
     trainer.test()

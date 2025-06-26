@@ -58,10 +58,10 @@ class ContextManager(object):
             logging.info('{}: {}'.format(flag, value))
 
     @staticmethod
-    def set_trainer(flags_obj, cm, dm, nc=None):
+    def set_trainer(flags_obj, cm, dm, nc=None, train_path=None, popularity_weighting_strategy=None):
 
         try:
-            return getattr(trainer, f'{flags_obj.model.upper()}_Trainer')(flags_obj, cm, dm, nc)
+            return getattr(trainer, f'{flags_obj.model.upper()}_Trainer')(flags_obj, cm, dm, nc, train_path, popularity_weighting_strategy)
         except AttributeError:
             raise NameError('trainer model name error!')
 

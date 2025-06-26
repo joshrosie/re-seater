@@ -2,7 +2,7 @@
 
 #SBATCH --partition=gpu_h100
 #SBATCH --gpus=1
-#SBATCH --job-name=seater_metrics
+#SBATCH --job-name=seater_metrics_normalized
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=01:00:00
@@ -24,27 +24,27 @@ cd $HOME/re-seater/SEATER_Generative_Retrieval
 export CUDA_LAUNCH_BLOCKING=1
 # Books
 #srun python calculate_metrics.py --name SASREC_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model SASREC --vocab 16 --epochs 60 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SASREC_Books__6_6_15/ckpt/best.pth
-#srun python calculate_metrics.py --name SEATER_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model SEATER --vocab 16 --epochs 60 --test_batch_size 512 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SEATER_Books__6_6_19/ckpt/best.pth
+#srun python calculate_metrics.py --name SEATER_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model SEATER --vocab 16 --epochs 60 --test_batch_size 512 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SEATER_Books__6_21_13/ckpt/best.pth
 #srun python calculate_metrics.py --name BERT4REC_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model BERT4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/BERT4REC_Books__6_10_19/ckpt/best.pth
 #srun python calculate_metrics.py --name BERT4REC_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model BERT4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/BERT4REC_YELP__6_10_19/ckpt/best.pth
 #srun python calculate_metrics.py --name BERT4REC_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model BERT4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/BERT4REC_NEWS__6_10_19/ckpt/best.pth
 # Yelp
 #srun python calculate_metrics.py --name SASREC_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model SASREC --vocab 8 --epochs 50 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SASREC_YELP__6_8_12/ckpt/best.pth
-#srun python calculate_metrics.py --name SEATER_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --epochs 50 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SEATER_YELP__6_8_13/ckpt/best.pth 
+#srun python calculate_metrics.py --name SEATER_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --epochs 50 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SEATER_YELP__6_21_12/ckpt/best.pth 
 # srun python calculate_metrics.py --name BERT4REC_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model BERT4REC --vocab 8 --epochs 50 --wandb_project bert4rec 
 
 # Mind
 #srun python calculate_metrics.py --name SASREC_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model SASREC --vocab 8 --epochs 50 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SASREC_NEWS__6_8_18/ckpt/best.pth
-#srun python calculate_metrics.py --name SEATER_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SEATER_NEWS__6_8_18/ckpt/best.pth
+#srun python calculate_metrics.py --name SEATER_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SEATER_NEWS__6_21_12/ckpt/best.pth
 
 # GRU4Rec
 #srun python calculate_metrics.py --name GRU4REC_BOOKS --dataset_name Books --num_workers 16 --gpu_id 0 --model GRU4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/GRU4REC_BOOKS__6_10_13/ckpt/best.pth
 #srun python calculate_metrics.py --name GRU4REC_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model GRU4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/GRU4REC_YELP__6_10_14/ckpt/best.pth 
 #srun python calculate_metrics.py --name GRU4REC_MIND --dataset_name MIND --num_workers 16 --gpu_id 0 --model GRU4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/GRU4REC_MIND__6_10_14/ckpt/best.pth
 
-# Yamda
+# Yambda
 #srun python calculate_metrics.py --name SASREC_Yambda --dataset_name Yambda --num_workers 16 --gpu_id 0 --model SASREC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SASREC_Yambda__6_14_12/ckpt/best.pth
-srun python calculate_metrics.py --name SEATER_Yambda --dataset_name Yambda --num_workers 16 --vocab 16 --gpu_id 0 --model SEATER --test_batch_size 512 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/best.pth
+srun python calculate_metrics.py --name SEATER_Yambda --dataset_name Yambda --num_workers 16 --vocab 16 --gpu_id 0 --model SEATER --test_batch_size 512 --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/SEATER_Yambda__6_21_12/ckpt/best.pth
 #srun python calculate_metrics.py --name BERT4REC_Yambda --dataset_name Yambda --num_workers 16 --gpu_id 0 --model BERT4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/BERT4REC_Yambda__6_14_19/ckpt/best.pth
 #srun python calculate_metrics.py --name GRU4REC_Yamda --dataset_name Yambda --num_workers 16 --gpu_id 0 --model GRU4REC --wandb_project fairness --ckpt_path /home/scur2718/re-seater/SEATER_Generative_Retrieval/workspace/GRU4REC_Yambda__6_14_12/ckpt/best.pth
 

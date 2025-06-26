@@ -15,7 +15,10 @@ import os
 import wandb
 
 import utils.data as data
-from utils.build_tree import build_hieraichical_clustering_tree
+#from utils.build_tree import build_hieraichical_clustering_tree
+from utils.normalized_tree import build_hieraichical_clustering_tree
+from utils.normalized_tree import extract_data
+from utils.normalized_tree import popularity_count
 from utils import Context as ctxt
 from utils.metrics import eva
 from model import *
@@ -359,7 +362,7 @@ class GRU4REC_Trainer(Sequence_Dual_Encoder_Trainer):
 
 
 class SEATER_Trainer(Trainer):
-    def __init__(self, flags_obj, cm, dm, new_config=None):
+    def __init__(self, flags_obj, cm, dm, new_config=None, train_path=None, popularity_weighting_strategy=None):
         """
         Args:
             flags_obj: arguments in main.py
@@ -376,18 +379,32 @@ class SEATER_Trainer(Trainer):
         self.update_model_config(new_config)
         self.lr = self.model_config['lr']
         self.set_tensorboard(flags_obj.tb)
+        self.train_path = flags_obj.train_path
+        self.popularity_weighting_strategy = flags_obj.popularity_weighting_strategy
         self.set_model()
         self.model = self.model.to(self.device)
+        
 
     def set_model(self):
         # build tree index structure
         self.dm.tree_data_par_path = os.path.join(self.dm.tree_data_par_path, f'{self.flags_obj.vocab}_branch_tree')
-        if not os.path.exists(f'{self.dm.tree_data_par_path}/itemID_2_tree_indexID.npy'):
+        
+        # --- ADD THESE DEBUG PRINT STATEMENTS ---
+        tree_file_path_to_check = f'{self.dm.tree_data_par_path}/itemID_2_tree_indexID_normalized.npy'
+        print(f"DEBUG: Current calculated tree data path: {self.dm.tree_data_par_path}")
+        print(f"DEBUG: Checking for tree existence at: {tree_file_path_to_check}")
+        print(f"DEBUG: Popularity weighting strategy in trainer: {self.popularity_weighting_strategy}")
+        # --- END DEBUG PRINT STATEMENTS ---
+
+        
+        if not os.path.exists(f'{self.dm.tree_data_par_path}/itemID_2_tree_indexID_normalized.npy'):
             build_hieraichical_clustering_tree(
                 item_emb_path = os.path.join(self.dm.datafile_par_path, self.dm.two_tower_item_emb),
                 output_file_path = self.dm.tree_data_par_path,
-                vocab_size = self.flags_obj.vocab
-            )
+                vocab_size = self.flags_obj.vocab,)
+                #item_popularity_scores=popularity_count(extract_data(self.train_path)),
+                #popularity_weighting_strategy = self.popularity_weighting_strategy)
+                #popularity_weighting_strategy = None)
         self.dm.num_neg = self.model_config['rk_num_neg']
 
         self.set_dataloader()
