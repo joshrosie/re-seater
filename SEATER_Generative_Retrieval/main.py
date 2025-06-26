@@ -36,6 +36,11 @@ def main():
     parser.add_argument('--random_seed', type=int, help='random seed', default=2023)
     # Choose a tree building flag between allowed options 'speedup', 'hybrid' and 'original'
     parser.add_argument('--tree_building', type=str, help='tree building method', default='original', choices=['speedup', 'hybrid', 'original'])
+    parser.add_argument('--train_path', type=str, help='file path to training file of the chosen dataset', default='')
+    parser.add_argument('--popularity_weighting_strategy', type=str, help='tree building method', default='None', choices=['diversity', 'accuracy', 'None'])
+
+
+
     parser.add_argument('--new_config', type=str, help='update model config', default='')
 
     args = parser.parse_args()

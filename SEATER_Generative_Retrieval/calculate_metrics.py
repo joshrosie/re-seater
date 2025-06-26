@@ -36,6 +36,8 @@ def main():
     parser.add_argument('--random_seed', type=int, help='random seed', default=2023)
     parser.add_argument('--ckpt_path', type=str, help='path to the checkpoint file', default='')
     parser.add_argument('--new_config', type=str, help='update model config', default='')
+    parser.add_argument('--popularity_weighting_strategy', type=str, help='popularity weighting strategy', default='none')
+    parser.add_argument('--train_path', type=str, help='path to the training data', default=None)
     args = parser.parse_args()
 
     def setup_seed(seed):

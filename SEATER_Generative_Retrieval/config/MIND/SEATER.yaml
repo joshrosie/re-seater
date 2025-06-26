@@ -20,6 +20,7 @@ Decoder:
   N_layer: 1
   nhead: 2
   inner_dim: 256
+  
   dropout: 0.2
 
 
