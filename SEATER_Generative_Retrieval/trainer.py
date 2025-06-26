@@ -405,7 +405,7 @@ class SEATER_Trainer(Trainer):
                 vocab_size = self.flags_obj.vocab,
                 num_items_for_greedy = 2000
             )
-            elif self.tree_building == 'original':
+            elif self.tree_building == 'original' and self.popularity_weighting_strategy == 'None':
                 # use the original version of the tree index
                 build_hieraichical_clustering_tree_original(
                 item_emb_path = os.path.join(self.dm.datafile_par_path, self.dm.two_tower_item_emb),
