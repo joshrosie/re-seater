@@ -84,23 +84,23 @@ The input to the model is a sequence of user interactions (e.g., items viewed or
 
 Following the original implementation, datasets are partitioned by user into 8 : 1 : 1 train : validation : test splits. User interaction histories are truncated to a maximum of 20 items. For validation and test, we use a sequential protocol: the first 80% of a user's history serves as input context, and the remaining 20% as prediction targets.
 
-- [ ] [Amazon Books](Link-to-dataset-DOI-or-URL)
+- [ ] [Amazon Books](https://nijianmo.github.io/amazon/)
   - [ ] Pre-processing: Used [ComiRec]() logic.
   - [ ] Dataset size: 482,934 users, 361,245 items
   - [ ] Attributes for item fairness: Book Categories for Gini Index
   
 
-- [ ] [Yelp](Link-to-dataset-DOI-or-URL)
+- [ ] [Yelp](https://business.yelp.com/data/resources/open-dataset/)
   - [ ] Pre-processing: Used [LightGCN]() repository splits.
   - [ ] Dataset size: 31,668 users, 38,048 items
   - [ ] Attributes for item fairness: Business Categories for Gini Index
 
-- [ ] [MIND](Link-to-dataset-DOI-or-URL)
+- [ ] [MIND](https://msnews.github.io/)
   - [ ] Pre-processing: MIND small; Used only the training portion of the dataset.
   - [ ] Dataset size: 50,000 users, 39,815 items
   - [ ] Attributes for item fairness: News categories for Gini Index
      
-- [ ] [Yambda](Link-to-dataset-DOI-or-URL)
+- [ ] [Yambda](https://huggingface.co/datasets/yandex/yambda)
   - [ ] Pre-processing: Kept only organic (non-recommended) interactions; Removed tracks played for <50% duration; Global temporal split: 299 days train / 1 day val / 30 min gap / 1 day test.
   - [ ] Dataset size: 8,798 users, 475,910 items
   - [ ] Genre-based or content-based categories for Gini Index
@@ -133,23 +133,23 @@ Following the original implementation, datasets are partitioned by user into 8 :
 
 _Describe each baseline, primary methods, and how they are implemented. Mention tools/frameworks used (e.g., Surprise, LightFM, RecBole, PyTorch)._
 Describe each baseline
-- [ ] [GRU4Rec](Link-to-reference)
+- [ ] [GRU4Rec](https://arxiv.org/abs/1511.06939)
   - [ ] A foundational session-based model using Gated Recurrent Units (GRUs) to encode sequential user interactions.
-  - [ ] Implemented based on the [ComiRec repository]().
+  - [ ] Implemented based on the [ComiRec repository](https://github.com/THUDM/ComiRec).
   - [ ] User representation is the final hidden state of the GRU.
-- [ ] [BERT4Rec](Link-to-reference)
+- [ ] [BERT4Rec](https://dl.acm.org/doi/10.1145/3357384.3357895)
   - [ ] A bidirectional Transformer-based model for sequential recommendation using a Cloze-style task (random token masking).
   - [ ] Inference uses a _MASK_ token to predict the next item.
   - [ ] Implementation adapted from [this PyTorch repo](https://github.com/jaywonchung/BERT4Rec-VAE-Pytorch)
-- [ ] [SASRec]()
+- [ ] [SASRec](https://ieeexplore.ieee.org/document/8594844)
   - [ ] A unidirectional self-attention model for autoregressive sequence modeling in recommendation.
   - [ ] User representation is derived from the final attended item embedding.
   - [ ] Also used to pretrain item embeddings for SEATER's tree construction.
-  - [ ] Based on the original [SASRec implementation]().
-- [ ] [SEATER]()
+  - [ ] Based on the original [SASRec implementation](https://github.com/kang205/SASRec).
+- [ ] [SEATER](https://dl.acm.org/doi/10.1145/3673791.3698408)
   - [ ] A generative retrieval model using semantic tree-structured identifiers and a contrastive multi-task training objective.
   - [ ] Uses a Transformer decoder to autoregressively generate hierarchical item identifiers.
-  - [ ] Implemented in [PyTorch]() using [authors’ original codebase]() and extended in this repo.
+  - [ ] Implemented in [PyTorch](https://dl.acm.org/doi/10.5555/3454287.3455008) using [authors’ original codebase](https://github.com/ethan00si/seater_generative_retrieval) and extended in this repo.
      
 ### 🧠 High-Level Description of Method
 
