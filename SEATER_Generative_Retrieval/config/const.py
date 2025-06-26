@@ -11,13 +11,17 @@ class Books_Config(object):
         # self.itemID_2_attr = 'vocab/item_2_attr_mapping.npy'
 
         # for tree-based index
-        #self.tree_data_par_path = './data/Books/tree_data_SASREC'
+        self.tree_data_par_path = './data/Books/tree_data_SASREC'
         #self.tree_data_par_path = './data/Books/tree_data_SASREC_hybrid'
-        self.tree_data_par_path = './data/Books/tree_data_SASREC_speedup_sklearn'
-
+        #self.tree_data_par_path = './data/Books/tree_data_SASREC_speedup_sklearn
+        #self.tree_data_par_path = './data/Books/tree_data_SASREC'
+        #self.tree_data_par_path = './data/Books/tree_data_SASREC_random_3'
         # self.tree_data_par_path = './data/Books/tree_data_SASREC'
+
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'
+        #self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID_normalized.npy'
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
+        #self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens_normalized.npy'
 
         self.two_tower_item_emb = 'vocab/Books_SASREC_item_emb.npy'
 
@@ -41,15 +45,19 @@ class Yelp_Config(object):
         self.test_file = 'dataset/test.tsv'
 
         # for tree-based index
-        #self.tree_data_par_path = './data/Yelp/tree_data_SASREC'
+        self.tree_data_par_path = './data/Yelp/tree_data_SASREC'
         # self.tree_data_par_path = './data/Yelp/tree_data_SASREC_hybrid'
-        #self.tree_data_par_path = './data/Yelp/tree_data_SASREC_speedup'
+        # self.tree_data_par_path = './data/Yelp/tree_data_SASREC_speedup'
         #self.tree_data_par_path = './data/Yelp/tree_data_SASREC_normal'
-        self.tree_data_par_path = './data/Yelp/tree_data_SASREC_speedup_sklearn'
+        #self.tree_data_par_path = './data/Yelp/tree_data_SASREC_speedup_sklearn'
+        # self.tree_data_par_path = './data/Yelp/tree_data_SASREC_normalization_accuracy'
 
         # self.tree_data_par_path = './data/Yelp/tree_data_SASREC'
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'
+        #self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID_normalized.npy'
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
+        #self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens_normalized.npy'
+
 
         self.two_tower_item_emb = 'vocab/Yelp_SASREC_item_emb.npy'
 
@@ -76,15 +84,19 @@ class MIND_Config(object):
         self.test_file = 'dataset/test.tsv'
 
         # for tree-based index
-        #self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
+        self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
         #self.tree_data_par_path = './data/MIND/tree_data_SASREC'
         #self.tree_data_par_path = './data/MIND/tree_data_SASREC_hybrid'
         #self.tree_data_par_path = './data/MIND/tree_data_SASREC_speedup'
         #self.tree_data_par_path = './data/MIND/tree_data_SASREC_normal'
-        self.tree_data_par_path = './data/MIND/tree_data_SASREC_speedup_sklearn'
-        self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'      
-        self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
+        # self.tree_data_par_path = './data/MIND/tree_data_SASREC_speedup_sklearn'
     
+        self.tree_data_par_path = './data/MIND/tree_data_SASREC'
+        self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'    
+        #self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID_normalized.npy'  
+        self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
+        #self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens_normalized.npy' 
+          
         self.two_tower_item_emb = 'vocab/MIND_SASREC_item_emb.npy'
 
         #dataset config
@@ -107,15 +119,17 @@ class Yambda_Config(object):
         self.test_file = 'dataset/test.tsv'
 
         # for tree-based index
-        #self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
+        self.tree_data_par_path = '../../MIND/MIND/tree_data_SASREC'
         #self.tree_data_par_path = './data/Yambda/tree_data_SASREC'
         #self.tree_data_par_path = './data/Yambda/tree_data_SASREC_hybrid'
         #self.tree_data_par_path = './data/Yambda/tree_data_SASREC_speedup'
         #self.tree_data_par_path = './data/Yambda/tree_data_SASREC_normal'
-        self.tree_data_par_path = './data/Yambda/tree_data_SASREC_speedup_sklearn'
+        #self.tree_data_par_path = './data/Yambda/tree_data_SASREC_speedup_sklearn'
 
         self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID.npy'      
         self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens.npy'
+        #self.tree_based_itemID_2_indexID = 'itemID_2_tree_indexID_normalized.npy' 
+        #self.tree_based_prefix_tree = 'tree_node_allowed_next_tokens_normalized.npy'
     
         self.two_tower_item_emb = 'vocab/Yambda_SASREC_item_emb.npy'
 

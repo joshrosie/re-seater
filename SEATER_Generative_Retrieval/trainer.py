@@ -17,6 +17,7 @@ import wandb
 import utils.data as data
 from utils.build_tree_original import build_hieraichical_clustering_tree_original
 from utils.build_tree_speedup import build_hieraichical_clustering_tree_speedup
+from utils.build_tree_normalized import build_hieraichical_clustering_tree_popularity, extract_data, popularity_count
 from utils import Context as ctxt
 from utils.metrics import eva
 from model import *
@@ -378,8 +379,11 @@ class SEATER_Trainer(Trainer):
         self.update_model_config(new_config)
         self.lr = self.model_config['lr']
         self.set_tensorboard(flags_obj.tb)
+        self.train_path = flags_obj.train_path
+        self.popularity_weighting_strategy = flags_obj.popularity_weighting_strategy
         self.set_model()
         self.model = self.model.to(self.device)
+        
 
     def set_model(self):
         # build tree index structure
@@ -401,14 +405,24 @@ class SEATER_Trainer(Trainer):
                 vocab_size = self.flags_obj.vocab,
                 num_items_for_greedy = 2000
             )
-            elif self.tree_building == 'original':
+            elif self.tree_building == 'original' and self.popularity_weighting_strategy == 'None':
                 # use the original version of the tree index
                 build_hieraichical_clustering_tree_original(
                 item_emb_path = os.path.join(self.dm.datafile_par_path, self.dm.two_tower_item_emb),
                 output_file_path = self.dm.tree_data_par_path,
                 vocab_size = self.flags_obj.vocab
             )
-            
+            elif self.popularity_weighting_strategy!='None':
+                build_hieraichical_clustering_tree_popularity(
+                    item_emb_path = os.path.join(self.dm.datafile_par_path, self.dm.two_tower_item_emb),
+                    output_file_path = self.dm.tree_data_par_path,
+                    vocab_size = self.flags_obj.vocab,
+                    item_popularity_scores=popularity_count(extract_data(self.train_path)),
+                    popularity_weighting_strategy = self.popularity_weighting_strategy)
+                    
+                
+                    
+
         self.dm.num_neg = self.model_config['rk_num_neg']
 
         self.set_dataloader()
