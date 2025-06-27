@@ -69,19 +69,23 @@ Most of the parameters are added as flags in the run file.
 
 ---
 
-## 🚀 5. Training
+## 🚀 5. Training experiments
 
+For training the baselines, select one of the following commands:
 
+- SEATER: ```jobs\experiment_SEATER.job```
+- SASREC: ```jobs\experiment_SASREC.job```
+- GRU4REC: ```jobs\experiment_GRU4REC.job```
+- BERT4REC: ```jobs\experiment_BERT4REC.job```
 
-Run the following command to train the baseline:
+For the speedup experiments on the SEATER model, run the following commands:
 
-```jobs\run.job```
+- Speedup: ```jobs\experiment_seater_speedup.job```
+- Hybrid: ```jobs\experiment_seater_hybrid.job```
 
-### Baselines
-
-You can change the model flag to run both SASREC and SEATER. When running SEATER on a new dataset you will first have to train a SASREC model and extract embeddings from it.
-
-
+For the normalization experiments on the SEATER model, run the following commands:
+- Diversity: ```jobs\experiment_normalization_diversity.job```
+- Accuracy: ```jobs\experiment_normalization_accuracy.job```
 
 ## 📈 Evaluation
 
