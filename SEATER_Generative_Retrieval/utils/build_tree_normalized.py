@@ -128,7 +128,7 @@ def build_hieraichical_clustering_tree_popularity(
     tree_node_allowed_next_tokens[num_items + 2][1:] = [pad_token] * (vocab_size - 1)
 
     if not os.path.exists(output_file_path):
-        os.mkdir(output_file_path)
+        os.makedirs(output_file_path, exist_ok=True)
 
     np.save(f'{output_file_path}/itemID_2_tree_indexID.npy', itemID_2_tree_indexID, allow_pickle=True)
     np.save(f'{output_file_path}/tree_node_allowed_next_tokens.npy', tree_node_allowed_next_tokens, allow_pickle=True)

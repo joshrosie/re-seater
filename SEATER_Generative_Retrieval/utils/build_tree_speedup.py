@@ -99,7 +99,7 @@ def build_hieraichical_clustering_tree_speedup(
     print(f' - Tree building time: {end_tree - start_tree:.2f}s')
 
     if not os.path.exists(output_file_path):
-        os.makedirs(output_file_path)
+        os.makedirs(output_file_path, exist_ok=True)
 
     np.save(f'{output_file_path}/itemID_2_tree_indexID.npy', itemID_2_tree_indexID)
     np.save(f'{output_file_path}/tree_node_allowed_next_tokens.npy', tree_node_allowed_next_tokens)
