@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_h100
+#SBATCH --gpus=1
+#SBATCH --job-name=Run_SASREC
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=4:00:00
+#SBATCH --output=/home/scur2718/re-seater/logs/out-%x.%A.out
+#SBATCH --error=/home/scur2718/re-seater/logs/err-%x.%A.err
+
+module purge
+module load 2024
+module load Miniconda3/24.7.1-0
+#module load jax/0.3.14-foss-2022a-CUDA-11.7.0
+module load CUDA/12.6.0
+
+# Activate your environment
+source activate seater
+
+# Go to the directory that contains the project, the runnable
+cd $HOME/re-seater/SEATER_Generative_Retrieval
+
+export CUDA_LAUNCH_BLOCKING=1
+# Books
+srun python main.py --name SASREC_Books --dataset_name Books --num_workers 16 --gpu_id 0 --model SASREC --vocab 16 --epochs 60 --wandb_project sasrec
+
+# Yelp
+srun python main.py --name SASREC_YELP --dataset_name Yelp --num_workers 16 --gpu_id 0 --model SASREC --vocab 8 --epochs 50 --wandb_project sasrec
+
+# Mind
+srun python main.py --name SASREC_NEWS --dataset_name MIND --num_workers 16 --gpu_id 0 --model SASREC --vocab 8 --epochs 50 --wandb_project sasrec
+
+# Yambda
+srun python main.py --name SASREC_Yambda --dataset_name Yambda --num_workers 16 --gpu_id 0 --model SASREC --vocab 16 --epochs 60 --wandb_project sasrec
