@@ -18,8 +18,8 @@ module load CUDA/12.6.0
 
 # Go to the directory that contains the conda env file and install it
 cd $HOME/re-seater
-conda create -n seater6 python=3.9.16 -y
-source activate seater6
+conda create -n seater python=3.9.16 -y
+source activate seater
 pip install -r requirements.txt
 conda install -c conda-forge cudatoolkit=11.1
 pip install --upgrade torch 
