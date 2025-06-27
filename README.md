@@ -50,7 +50,7 @@ Generative retrieval models like SEATER, proposed by Si et al., enhance sequenti
     - SEATER leads in diversity, while fairness (via Gini) remains dataset-dependent and less conclusive.
  
 🌲 **Efficient Tree Building**
-- Problem: SEATER’s original tree-building method (constrained k-means at each level) scales poorly with the number of items (complexity: $O((N^3k + N^2k^2 + Nk^3)\log(N + k)$)
+- Problem: SEATER’s original tree-building method (constrained k-means at each level) scales poorly with the number of items (complexity: $O((N^3k + N^2k^2 + Nk^3)\log(N + k))$)
 - Proposed Solutions:
     - Greedy ("Speedup") Method: Faster assignment of items using standard k-means + capacity-constrained nearest assignment.
     - Hybrid Method: Greedy method for top levels, constrained k-means for lower levels (cutoff at 2000 items).
