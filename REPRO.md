@@ -77,7 +77,7 @@ For training the baselines, select one of the following commands:
 - GRU4REC: ```jobs\experiment_GRU4REC.job```
 - BERT4REC: ```jobs\experiment_BERT4REC.job```
 
-To train SEATER, you must first train SASREC on the corresponding dataset and then extract its item embedding layer using the ```extract_embeddings.ipynb``` notebook which is located in the ```EATER_Generative_Retrieval/data/dataset_name``` directory, where ```dataset_name = {Books, Yelp, MIND, Yambda}```. 
+To train SEATER, you must first train SASREC on the corresponding dataset and then extract its item embedding layer using the ```extract_embeddings.ipynb``` notebook which is located in the ```SEATER_Generative_Retrieval/data/{dataset_name}``` directory, where ```dataset_name = {Books, Yelp, MIND, Yambda}```. 
 
 In the notebook, make sure to provide the path to the best SASREC checkpoint.
 Once the embeddings are extracted, you can proceed to train SEATER for all datasets by running the following job:
