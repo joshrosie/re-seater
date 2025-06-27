@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_h100
+#SBATCH --gpus=1
+#SBATCH --job-name=Run_SEATER_speedup
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=10:00:00
+#SBATCH --output=/home/scur2718/re-seater/logs_faster/out-%x.%A.out
+#SBATCH --error=/home/scur2718/re-seater/logs_faster/err-%x.%A.err
+
+module purge
+module load 2024
+module load Miniconda3/24.7.1-0
+#module load jax/0.3.14-foss-2022a-CUDA-11.7.0
+module load CUDA/12.6.0
+
+# Activate your environment
+source activate seater
+
+# Go to the directory that contains the project, the runnable
+cd $HOME/re-seater/SEATER_Generative_Retrieval
+
+export CUDA_LAUNCH_BLOCKING=1
+# Books
+srun python main.py --name SEATER_Books_speedup --dataset_name Books --num_workers 16 --gpu_id 0 --model SEATER --vocab 16 --epochs 60 --test_batch_size 512 --wandb_project seater --tree_building speedup 
+
+# Yelp
+srun python main.py --name SEATER_YELP_speedup --dataset_name Yelp --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --epochs 50 --wandb_project seater  --tree_building speedup  
+
+# Mind
+srun python main.py --name SEATER_NEWS_speedup --dataset_name MIND --num_workers 16 --gpu_id 0 --model SEATER --vocab 8 --wandb_project seater --tree_building speedup 
+
+# Yambda
+srun python main.py --name SEATER_Yambda_speedup --dataset_name Yambda --num_workers 16 --gpu_id 0 --model SEATER --vocab 16 --epochs 60 --test_batch_size 512 --wandb_project seater --tree_building speedup 
