@@ -1,17 +1,5 @@
 # RE-SEATER: Optimizing Hierarchical Identifiers for Generative Sequential Recommendation
 
-
-## 🧑‍💻 Team Members
-- Odysseas Boufalis – odyssefs.boufalis@student.uva.nl
-- Polytimi Gkotsi – polytimi.gkotsi@student.uva.nl
-- Joshua Rosenthal – joshua.rosenthal@student.uva.nl
-- Federica Valeau - federica.valeau@student.uva.nl
-
-## 👥 Supervising TAs
-- David Vos (Main Supervisor)
-- Owen de Jong (Co-supervisor)
-
-
 ---
 
 ## 🧾 Project Abstract
