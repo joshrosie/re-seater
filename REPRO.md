@@ -20,7 +20,7 @@ This document provides the full set of instructions to reproduce our project res
 ├── requirements.txt        # Python dependencies
 ├── README.md               # README file
 ├── REPRO.md                # This file
-├── jobs/                   # Slurm files for snellius
+├── jobs/                   # Slurm files
 ```
 
 ---
